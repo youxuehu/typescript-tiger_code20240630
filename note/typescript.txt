@@ -1,0 +1,15 @@
+1: 安装 typescript
+ 命令：npm i -g typescript
+ 查看版本号是否安装成功： tsc -v
+
+ 执行ts文件分2步：
+ 1:touch hello.ts
+ 2:tsc hello.ts 生成 hello.js
+ 3:然后再执行 node hello.js
+
+
+2: 简化执行 ts 文件
+   使用ts-node
+   安装命令：npm i -g ts-node
+   可以直接执行ts: ts-node hello.ts
+
