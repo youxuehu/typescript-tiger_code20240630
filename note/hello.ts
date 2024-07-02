@@ -330,49 +330,36 @@ let obFun: IdFun<number> = {
 }
 console.info(obFun.id(123))
 console.info(obFun.ids())
-
-//
-// import fetch from 'node-fetch'
-// //
-// // const fetch = require('node-fetch');
-// async function fetchData2(url: string): Promise<Response> {
-//   try {
-//     const response = await fetch(url);
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! Status: ${response.status}`);
-//     }
-//     return response;
-//   } catch (error) {
-//     console.error(error);
-//     throw error;
-//   }
-// }
-//
-// // 使用示例
-// fetchData2('https://www.baidu.com').then(response => {
-//   return response.json();
-// }).then(data => {
-//   console.log(data);
-// }).catch(error => {
-//   console.error('Error fetching data:', error);
-// });
-
-
+/**
+ * 下载文件
+ */
 import axios from 'axios';
+import * as fs from 'fs';
+import * as path from 'path';
 
-async function fetchData(url: string): Promise<any> {
+async function downloadWebFile(url: string, filename: string): Promise<any> {
   try {
-    const response = await axios.get(url);
-    return response.data;
+    // const response = await axios.get(url);
+    const response = await axios({
+      url,
+      method: 'GET',
+      responseType: 'stream',
+    });
+    const writer = fs.createWriteStream(filename);
+    response.data.pipe(writer);
+    return new Promise((resolve, reject) => {
+      writer.on('finish', resolve);
+      writer.on('error', reject);
+    });
   } catch (error) {
     console.error(error);
     throw error;
   }
 }
 
-// 使用示例
-fetchData('https://www.baidu.com').then(data => {
-  console.log("fetchData", data);
+// 下载网络文件
+downloadWebFile('https://www.baidu.com/img/flexible/logo/pc/result@2.png', "1.png").then(data => {
+  console.log(data)
 }).catch(error => {
   console.error('Error fetching data:', error);
 });
